@@ -1,12 +1,11 @@
 """Retrieval and question-answering logic."""
 
-from typing import List, Dict, Optional, Any
-from langchain_community.vectorstores import Chroma
+from typing import Dict, Optional, Any
+from langchain_chroma import Chroma
 from langchain_openai import ChatOpenAI
 from langchain_classic.chains import create_retrieval_chain
 from langchain_classic.chains.combine_documents import create_stuff_documents_chain
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.documents import Document
 import os
 
 
@@ -75,19 +74,6 @@ class QARetriever:
         qa_chain = create_retrieval_chain(retriever, document_chain)
 
         return qa_chain
-
-    def retrieve_context(self, query: str) -> List[Document]:
-        """
-        Retrieve relevant document chunks for a query.
-
-        Args:
-            query: User's question
-
-        Returns:
-            List of relevant Document objects
-        """
-        retriever = self.vector_store.as_retriever(search_kwargs={"k": self.k})
-        return retriever.invoke(query)
 
     def answer_question(self, question: str) -> Dict[str, Any]:
         """
